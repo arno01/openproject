@@ -215,6 +215,7 @@ import {
 import {WpButtonMacroModal} from "core-components/modals/editor/macro-wp-button-modal/wp-button-macro.modal";
 import {EditorMacrosService} from "core-components/modals/editor/editor-macros.service";
 import {WikiIncludePageMacroModal} from "core-components/modals/editor/macro-wiki-include-page-modal/wiki-include-page-macro.modal";
+import {ChildPagesMacroModal} from "core-components/modals/editor/macro-child-pages-modal/child-pages-macro.modal";
 
 @NgModule({
   imports: [
@@ -457,6 +458,7 @@ import {WikiIncludePageMacroModal} from "core-components/modals/editor/macro-wik
     WpDestroyModal,
     WpButtonMacroModal,
     WikiIncludePageMacroModal,
+    ChildPagesMacroModal,
 
     // External query configuration
     ExternalQueryConfigurationComponent,
@@ -540,6 +542,7 @@ import {WikiIncludePageMacroModal} from "core-components/modals/editor/macro-wik
     AttributeHelpTextModal,
     WpButtonMacroModal,
     WikiIncludePageMacroModal,
+    ChildPagesMacroModal,
 
     // External query configuration
     ExternalQueryConfigurationComponent,
