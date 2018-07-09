@@ -120,6 +120,21 @@ export class OpCkeditorFormComponent implements OnInit {
       // Continue with submission
       return true;
     });
+
+    this.setLabel();
+  }
+
+  private setLabel() {
+    let textareaId = this.textareaSelector.substring(1);
+    let label = jQuery(`label[for=${textareaId}`);
+
+    let ckContent = this.$element.find('.ck-content');
+
+    ckContent.attr('aria-label', null);
+    ckContent.attr('aria-labelledby', textareaId);
+
+    label.click(() => {
+      ckContent.focus();
+    });
   }
 }
-

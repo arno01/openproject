@@ -1,4 +1,5 @@
 #-- encoding: UTF-8
+
 #-- copyright
 # OpenProject is a project management system.
 # Copyright (C) 2012-2017 the OpenProject Foundation (OPF)
@@ -27,45 +28,15 @@
 # See doc/COPYRIGHT.rdoc for more details.
 #++
 
-module OpenProject::TextFormatting::Formatters
-  module Textile
-    class Helper
-
-      attr_reader :view_context
-
-      def initialize(view_context)
-        @view_context = view_context
+module OpenProject::TextFormatting::Formats::Markdown
+  class Format < OpenProject::TextFormatting::Formats::BaseFormat
+    class << self
+      def format
+        :markdown
       end
 
-      def text_formatting_js_includes
-        view_context.javascript_include_tag 'jstoolbar/textile.js'
-      end
-
-      def text_formatting_has_preview?
-        true
-      end
-
-      def wikitoolbar_for(field_id)
-        help_button = view_context.content_tag(
-          :button,
-          '',
-          type: 'button',
-          class: 'jstb_help formatting-help-link-button',
-          :'aria-label' => ::I18n.t('js.inplace.link_formatting_help'),
-          title: ::I18n.t('js.inplace.link_formatting_help')
-        )
-
-
-        view_context.content_for(:additional_js_dom_ready) do
-          %(
-              var wikiToolbar = new jsToolBar(document.getElementById('#{field_id}'));
-
-              wikiToolbar.setHelpLink(jQuery('#{view_context.escape_javascript help_button}')[0]);
-              wikiToolbar.draw();
-            ).html_safe
-        end
-
-        ''.html_safe
+      def priority
+        5
       end
     end
   end

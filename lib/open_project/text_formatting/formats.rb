@@ -1,4 +1,5 @@
 #-- encoding: UTF-8
+
 #-- copyright
 # OpenProject is a project management system.
 # Copyright (C) 2012-2018 the OpenProject Foundation (OPF)
@@ -27,28 +28,39 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
-module OpenProject::TextFormatting::Formatters
-  module Plain
-    class Formatter < OpenProject::TextFormatting::Formatters::Base
-      attr_reader :context,
-                  :pipeline
+module OpenProject::TextFormatting
+  module Formats
+    class << self
+      attr_reader :plain, :rich
 
-      def initialize(context)
-        @context = context
-        @pipeline = HTML::Pipeline.new(located_filters, context)
+      %i(plain rich).each do |flavor|
+        define_method("#{flavor}_format") do
+          send(flavor).format
+        end
+
+        define_method("#{flavor}_formatter") do
+          send(flavor).formatter
+        end
+
+        define_method("#{flavor}_helper") do
+          send(flavor).helper
+        end
+
+        define_method("register_#{flavor}!") do |klass|
+          instance_variable_set("@#{flavor}", klass)
+        end
       end
 
-      def to_html(text)
-        pipeline.to_html(text, context).html_safe
+      def supported?(name)
+        [plain, rich].map(&:format).include?(name.to_sym)
       end
 
-      def to_document(text)
-        pipeline.to_document text, context
-      end
-
-      def filters
-        %i(plain pattern_matcher)
+      def plain?(name)
+        name && plain.format == name.to_sym
       end
     end
   end
 end
+
+OpenProject::TextFormatting::Formats.register_plain! ::OpenProject::TextFormatting::Formats::Plain::Format
+OpenProject::TextFormatting::Formats.register_rich! ::OpenProject::TextFormatting::Formats::Markdown::Format

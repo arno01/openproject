@@ -1,4 +1,5 @@
 #-- encoding: UTF-8
+
 #-- copyright
 # OpenProject is a project management system.
 # Copyright (C) 2012-2018 the OpenProject Foundation (OPF)
@@ -27,30 +28,32 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
-require 'spec_helper'
+module OpenProject::TextFormatting::Formats
+  module Plain
+    class Formatter < OpenProject::TextFormatting::Formats::BaseFormatter
+      attr_reader :context,
+                  :pipeline
 
-describe OpenProject::TextFormatting::Formats::Plain::Formatter do
-  subject { described_class.new({}) }
+      def initialize(context)
+        @context = context
+        @pipeline = HTML::Pipeline.new(located_filters, context)
+      end
 
-  it 'should plain text' do
-    assert_html_output('This is some input' => 'This is some input')
-  end
+      def to_html(text)
+        pipeline.to_html(text, context).html_safe
+      end
 
-  it 'should escaping' do
-    assert_html_output(
-      'this is a <script>' => 'this is a &lt;script&gt;'
-    )
-  end
+      def to_document(text)
+        pipeline.to_document text, context
+      end
 
-  private
+      def filters
+        %i(plain pattern_matcher)
+      end
 
-  def assert_html_output(to_test, expect_paragraph = true)
-    to_test.each do |text, expected|
-      assert_equal((expect_paragraph ? "<p>#{expected}</p>" : expected), subject.to_html(text), "Formatting the following text failed:\n===\n#{text}\n===\n")
+      def self.format
+        :plain
+      end
     end
-  end
-
-  def to_html(text)
-    subject.to_html(text)
   end
 end

@@ -1,7 +1,8 @@
 #-- encoding: UTF-8
+
 #-- copyright
 # OpenProject is a project management system.
-# Copyright (C) 2012-2018 the OpenProject Foundation (OPF)
+# Copyright (C) 2012-2017 the OpenProject Foundation (OPF)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License version 3.
@@ -24,33 +25,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
-# See docs/COPYRIGHT.rdoc for more details.
+# See doc/COPYRIGHT.rdoc for more details.
 #++
 
-require 'spec_helper'
+module OpenProject::TextFormatting::Formats::Plain
+  class Format < OpenProject::TextFormatting::Formats::BaseFormat
+    class << self
+      def format
+        :plain
+      end
 
-describe OpenProject::TextFormatting::Formats::Plain::Formatter do
-  subject { described_class.new({}) }
-
-  it 'should plain text' do
-    assert_html_output('This is some input' => 'This is some input')
-  end
-
-  it 'should escaping' do
-    assert_html_output(
-      'this is a <script>' => 'this is a &lt;script&gt;'
-    )
-  end
-
-  private
-
-  def assert_html_output(to_test, expect_paragraph = true)
-    to_test.each do |text, expected|
-      assert_equal((expect_paragraph ? "<p>#{expected}</p>" : expected), subject.to_html(text), "Formatting the following text failed:\n===\n#{text}\n===\n")
+      def priority
+        100
+      end
     end
-  end
-
-  def to_html(text)
-    subject.to_html(text)
   end
 end
