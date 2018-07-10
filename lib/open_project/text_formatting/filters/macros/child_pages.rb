@@ -43,22 +43,23 @@ module OpenProject::TextFormatting::Filters::Macros
     end
 
     def insert_child_pages(macro, context)
-      args = macro['data-page']
+      pageValue = macro['data-page']
+      include_parent = macro['data-include-parent'].to_s == 'true'
       user = context[:current_user]
       page = nil
 
-      if args.present?
-        page = Wiki.find_page(args, project: context[:project])
+      if pageValue.present?
+        page = Wiki.find_page(pageValue, project: context[:project])
       elsif context[:object].is_a?(WikiContent)
         page = context[:object].page
       end
 
       if page.nil? || !user.allowed_to?(:view_wiki_pages, page.wiki.project)
-        raise I18n.t('macros.include_wiki_page.errors.page_not_found', name: args)
+        raise I18n.t('macros.include_wiki_page.errors.page_not_found', name: pageValue)
       end
 
       pages = ([page] + page.descendants).group_by(&:parent_id)
-      pages_tree = ApplicationController.helpers.render_page_hierarchy(pages, page.id)
+      pages_tree = ApplicationController.helpers.render_page_hierarchy(pages, include_parent ? page.parent_id : page.id)
       macro.replace(pages_tree)
     end
 

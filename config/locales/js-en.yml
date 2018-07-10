@@ -84,12 +84,13 @@ en:
     editor:
       macro:
         child_pages:
-          button: 'List child pages'
-          text: 'list of child pages (placeholder)'
+          button: 'Links to child pages'
+          include_parent: 'Include parent'
+          text: '[Placeholder] Links to child pages of'
           page: 'Wiki page'
+          this_page: 'this page'
           hint: |
-            List all child pages of the current page or, by specifying its title or slug, of another page.
-            You can list all child pages of paga of a different project by separating them with a colon like the following example.
+            Leave this field empty to list all child pages of the current page. If you want to reference a different page, provide its title or slug.
         toc: 'Table of contents'
         wiki_page_include:
           button: 'Include content of another wiki page'

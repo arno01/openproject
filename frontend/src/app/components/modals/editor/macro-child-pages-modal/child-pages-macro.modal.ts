@@ -31,10 +31,6 @@ import {OpModalLocalsToken} from "core-components/op-modals/op-modal.service";
 import {AfterViewInit, Component, ElementRef, Inject, ViewChild} from "@angular/core";
 import {OpModalLocalsMap} from "core-components/op-modals/op-modal.types";
 import {I18nService} from "core-app/modules/common/i18n/i18n.service";
-import {WorkPackageCreateService} from "core-components/wp-new/wp-create.service";
-import {IWorkPackageCreateServiceToken} from "core-components/wp-new/wp-create.service.interface";
-import {TypeResource} from "core-app/modules/hal/resources/type-resource";
-import {CurrentProjectService} from "core-components/projects/current-project.service";
 
 @Component({
   templateUrl: './child-pages-macro.modal.html'
@@ -47,7 +43,9 @@ export class ChildPagesMacroModal extends OpModalComponent implements AfterViewI
   public closeOnOutsideClick = true;
 
   public selectedPage:string;
+  public selectedIncludeParent:boolean;
   public page:string = '';
+  public includeParent:boolean = false;
 
   @ViewChild('selectedPageInput') selectedPageInput:ElementRef;
 
@@ -55,6 +53,7 @@ export class ChildPagesMacroModal extends OpModalComponent implements AfterViewI
     title: this.I18n.t('js.editor.macro.child_pages.button'),
     hint: this.I18n.t('js.editor.macro.child_pages.hint'),
     page: this.I18n.t('js.editor.macro.child_pages.page'),
+    include_parent: this.I18n.t('js.editor.macro.child_pages.include_parent'),
     button_save: this.I18n.t('js.button_save'),
     button_cancel: this.I18n.t('js.button_cancel'),
     close_popup: this.I18n.t('js.close_popup_title')
@@ -66,6 +65,7 @@ export class ChildPagesMacroModal extends OpModalComponent implements AfterViewI
 
     super(locals, elementRef);
     this.selectedPage = this.page = this.locals.page;
+    this.selectedIncludeParent = this.includeParent = this.locals.includeParent;
 
     // We could provide an autocompleter here to get correct page names
   }
@@ -73,11 +73,16 @@ export class ChildPagesMacroModal extends OpModalComponent implements AfterViewI
   public applyAndClose(evt:JQueryEventObject) {
     this.changed = true;
     this.page = this.selectedPage;
+    this.includeParent = this.selectedIncludeParent;
     this.closeMe(evt);
   }
 
   ngAfterViewInit() {
     this.selectedPageInput.nativeElement.focus();
+  }
+
+  updateIncludeParent(val:boolean) {
+    this.selectedIncludeParent = val;
   }
 }
 

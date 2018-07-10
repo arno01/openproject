@@ -31,12 +31,30 @@
                     name="selected-page"
                     [value]="selectedPage"
                     (change)="selectedPage = $event.target.value"
-                    class="form--select" />
+                    class="form--select"
+                    placeholder="my-project:my-page" />
               </div>
             </div>
-            <p [textContent]="text.hint"></p>
-            <p><kbd>project-identifier:my-wiki-page</kbd></p>
           </div>
+          <div class="form--field">
+            <div class="form--field-container">
+              <label class="form--label-with-check-box">
+                <div class="form--check-box-container">
+                  <input
+                          #parentIncludedInput
+                          tabindex="3"
+                          type="checkbox"
+                          id="include-parent"
+                          name="include-parent"
+                          [ngModel]="selectedIncludeParent"
+                          (ngModelChange)="updateIncludeParent($event)"
+                          class="form--check-box" />
+                </div>
+                {{ text.include_parent }}
+              </label>
+            </div>
+          </div>
+          <p [textContent]="text.hint"></p>
         </fieldset>
       </form>
     </div>
